@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hnapp/src/article.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void main() {
   runApp(MyApp());
@@ -10,6 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -38,11 +40,26 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: _articles.map((article) =>new Text(article.text)).toList(),
-        ),
+      body: ListView(
+        children: _articles.map(_buildItem).toList(),
+      ),
+    );
+  }
+
+  Widget _buildItem(Article article) {
+    return Padding(
+      padding:  EdgeInsets.all(16.0),
+      child: ListTile(
+        title: Text(
+          article.text,
+          style: TextStyle(fontSize: 24.0),
+        ),subtitle: Text('${article.commentsCount} comments'),
+        onTap: () async{
+          final fakeUrl = 'http://${article.domain}';
+          if( await canLaunch(fakeUrl)){
+            launch(fakeUrl);
+          }
+        },
       ),
     );
   }
