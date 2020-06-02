@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hnapp/src/article.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -53,11 +54,13 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(article.text, style: TextStyle(fontSize: 24.0)),
         children: <Widget>[
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               Text('${article.commentsCount} comments'),
               MaterialButton(
+                color: Colors.green,
                 onPressed: () {},
-                child: Text('Open'),
+                child: Text('OPEN'),
               ),
             ],
           ),
