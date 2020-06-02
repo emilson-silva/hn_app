@@ -48,18 +48,27 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget _buildItem(Article article) {
     return Padding(
-      padding:  EdgeInsets.all(16.0),
-      child: ListTile(
-        title: Text(
-          article.text,
-          style: TextStyle(fontSize: 24.0),
-        ),subtitle: Text('${article.commentsCount} comments'),
-        onTap: () async{
+      padding: EdgeInsets.all(16.0),
+      child: ExpansionTile(
+        title: Text(article.text, style: TextStyle(fontSize: 24.0)),
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Text('${article.commentsCount} comments'),
+              MaterialButton(
+                onPressed: () {},
+                child: Text('Open'),
+              ),
+            ],
+          ),
+        ],
+
+        /* onTap: () async{
           final fakeUrl = 'http://${article.domain}';
           if( await canLaunch(fakeUrl)){
             launch(fakeUrl);
           }
-        },
+        },*/
       ),
     );
   }
