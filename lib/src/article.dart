@@ -35,6 +35,14 @@ final articles = [
     commentsCount: 62,
   ),
   new Article(
+    text: 'The Boring Flutter Development Show [Pilot Episode]',
+    domain: 'www.youtube.com',
+    by: 'zdw',
+    age: '3 hours',
+    score: 177,
+    commentsCount: 62,
+  ),
+  new Article(
     text: 'BMW says electric car mass production not viable until 2020',
     domain: 'reuters.com',
     by: 'Mononokay',
