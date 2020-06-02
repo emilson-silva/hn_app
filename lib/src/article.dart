@@ -18,6 +18,15 @@ class Article {
 final articles = [
   new Article(
     text:
+        'Ministro pede à PF investigação sobre vazamento de supostos dados de Bolsonaro e filhos',
+    domain: 'g1.globo.com',
+    by: 'globo',
+    age: '3 hours',
+    score: 287,
+    commentsCount: 128,
+  ),
+  new Article(
+    text:
         'Circular Shock Acoustic Waves in Ionosphere triggered by Launch of Formosat - 5',
     domain: 'wiley.com',
     by: 'zdw',
@@ -67,8 +76,7 @@ final articles = [
     commentsCount: 26,
   ),
   new Article(
-    text:
-    'A Visiting Star jostled our solar System 70,000 Years Ago,',
+    text: 'A Visiting Star jostled our solar System 70,000 Years Ago,',
     domain: 'gizmodo.com',
     by: 'rbanffy',
     age: '7 hours',
@@ -85,7 +93,7 @@ final articles = [
   ),
   new Article(
     text:
-    'Circular Shock Acoustic Waves in Ionosphere triggered by Launch of Formosat - 5',
+        'Circular Shock Acoustic Waves in Ionosphere triggered by Launch of Formosat - 5',
     domain: 'wiley.com',
     by: 'zdw',
     age: '3 hours',
@@ -126,7 +134,7 @@ final articles = [
   ),
   new Article(
     text:
-    'Section 230: A Key Legal Shield for Facebook, Google Is about to Change,',
+        'Section 230: A Key Legal Shield for Facebook, Google Is about to Change,',
     domain: 'github.com',
     by: 'bluzi',
     age: '8 hours',
@@ -134,8 +142,7 @@ final articles = [
     commentsCount: 26,
   ),
   new Article(
-    text:
-    'A Visiting Star jostled our solar System 70,000 Years Ago,',
+    text: 'A Visiting Star jostled our solar System 70,000 Years Ago,',
     domain: 'gizmodo.com',
     by: 'rbanffy',
     age: '7 hours',
@@ -152,7 +159,7 @@ final articles = [
   ),
   new Article(
     text:
-    'Circular Shock Acoustic Waves in Ionosphere triggered by Launch of Formosat - 5',
+        'Circular Shock Acoustic Waves in Ionosphere triggered by Launch of Formosat - 5',
     domain: 'wiley.com',
     by: 'zdw',
     age: '3 hours',
@@ -193,7 +200,7 @@ final articles = [
   ),
   new Article(
     text:
-    'Section 230: A Key Legal Shield for Facebook, Google Is about to Change,',
+        'Section 230: A Key Legal Shield for Facebook, Google Is about to Change,',
     domain: 'github.com',
     by: 'bluzi',
     age: '8 hours',
@@ -201,8 +208,7 @@ final articles = [
     commentsCount: 26,
   ),
   new Article(
-    text:
-    'A Visiting Star jostled our solar System 70,000 Years Ago,',
+    text: 'A Visiting Star jostled our solar System 70,000 Years Ago,',
     domain: 'gizmodo.com',
     by: 'rbanffy',
     age: '7 hours',

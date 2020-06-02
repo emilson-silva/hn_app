@@ -54,24 +54,22 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(article.text, style: TextStyle(fontSize: 24.0)),
         children: <Widget>[
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               Text('${article.commentsCount} comments'),
-              MaterialButton(
+              IconButton(
+                icon: Icon(Icons.launch),
                 color: Colors.green,
-                onPressed: () {},
-                child: Text('OPEN'),
+                onPressed: () async {
+                  final fakeUrl = 'http://${article.domain}';
+                  if (await canLaunch(fakeUrl)) {
+                    launch(fakeUrl);
+                  }
+                },
               ),
             ],
           ),
         ],
-
-        /* onTap: () async{
-          final fakeUrl = 'http://${article.domain}';
-          if( await canLaunch(fakeUrl)){
-            launch(fakeUrl);
-          }
-        },*/
       ),
     );
   }
