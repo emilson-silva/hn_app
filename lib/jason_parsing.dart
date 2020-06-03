@@ -1,6 +1,14 @@
 import 'dart:convert' as json;
 
-class Article {
+import 'package:built_value/built_value.dart';
+part 'json_parsing.dart';
+
+abstract class Article  implements Built<Article, ArticleBuilder;> {
+Article._();
+  factory Article([updates(ArticleBuilder b)]) = _$CLASS_NAMES;
+}
+
+/*class Article {
   final String text;
   final String url;
   final String by;
@@ -19,16 +27,18 @@ class Article {
         time: json['time'],
         score: json['score']);
   }
-}
+}*/
 
 List<int> parseTopStories(String jsonStr) {
-  final parsed = json.jsonDecode(jsonStr);
+  return [];
+/*  final parsed = json.jsonDecode(jsonStr);
   final listOfIds = List<int>.from(parsed);
-  return listOfIds;
+  return listOfIds;*/
 }
 
 Article parseArticle(String jsonStr) {
-  final parsed = json.jsonDecode(jsonStr);
+  return null;
+  /* final parsed = json.jsonDecode(jsonStr);
   Article article = Article.fromJson(parsed);
-  return article;
+  return article;*/
 }
