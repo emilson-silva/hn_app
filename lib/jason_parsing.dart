@@ -1,11 +1,12 @@
 import 'dart:convert' as json;
 
 import 'package:built_value/built_value.dart';
-part 'json_parsing.dart';
 
-abstract class Article  implements Built<Article, ArticleBuilder;> {
-Article._();
-  factory Article([updates(ArticleBuilder b)]) = _$CLASS_NAMES;
+part 'json_parsing.g.dart';
+
+abstract class Article implements Built<Article, ArticleBuilder> {
+  Article._();
+  factory Article([updates(ArticleBuilder b)]) = _Article;
 }
 
 /*class Article {
