@@ -8,16 +8,6 @@ class Article {
 
   const Article(
       {this.age, this.url, this.by, this.commentsCount, this.score, this.text});
-
-  factory Article.fromJson(Map<String, dynamic> json) {
-    if (json == null) return null;
-
-    return Article(
-      text: json['text'] ?? [null],
-      url: json['url'],
-      by: json['by'],
-    );
-  }
 }
 
 final articles = [
