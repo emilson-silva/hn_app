@@ -1,25 +1,30 @@
 class Article {
   final String text;
-  final String domain;
+  final String url;
   final String by;
   final String age;
   final int score;
   final int commentsCount;
 
   const Article(
-      {this.age,
-      this.domain,
-      this.by,
-      this.commentsCount,
-      this.score,
-      this.text});
+      {this.age, this.url, this.by, this.commentsCount, this.score, this.text});
+
+  factory Article.fromJson(Map<String, dynamic> json) {
+    if (json == null) return null;
+
+    return Article(
+      text: json['text'] ?? [null],
+      url: json['url'],
+      by: json['by'],
+    );
+  }
 }
 
 final articles = [
   new Article(
     text:
         'Ministro pede à PF investigação sobre vazamento de supostos dados de Bolsonaro e filhos',
-    domain: 'g1.globo.com',
+    url: 'g1.globo.com',
     by: 'globo',
     age: '3 hours',
     score: 287,
@@ -28,7 +33,7 @@ final articles = [
   new Article(
     text:
         'Circular Shock Acoustic Waves in Ionosphere triggered by Launch of Formosat - 5',
-    domain: 'wiley.com',
+    url: 'wiley.com',
     by: 'zdw',
     age: '3 hours',
     score: 177,
@@ -36,7 +41,7 @@ final articles = [
   ),
   new Article(
     text: 'The Boring Flutter Development Show [Pilot Episode]',
-    domain: 'www.youtube.com',
+    url: 'www.youtube.com',
     by: 'zdw',
     age: '3 hours',
     score: 177,
@@ -44,7 +49,7 @@ final articles = [
   ),
   new Article(
     text: 'BMW says electric car mass production not viable until 2020',
-    domain: 'reuters.com',
+    url: 'reuters.com',
     by: 'Mononokay',
     age: '2 hours',
     score: 81,
@@ -52,7 +57,7 @@ final articles = [
   ),
   new Article(
     text: 'BMW says electric car mass production not viable until 2020',
-    domain: 'reuters.com',
+    url: 'reuters.com',
     by: 'Mononokay',
     age: '2 hours',
     score: 81,
@@ -60,7 +65,7 @@ final articles = [
   ),
   new Article(
     text: 'Evolution Is the New Deep Learning',
-    domain: 'sentient.ai',
+    url: 'sentient.ai',
     by: 'jonbaer',
     age: '4 hours',
     score: 200,
@@ -68,7 +73,7 @@ final articles = [
   ),
   new Article(
     text: 'TCP Tracepoints have arrived in Linux',
-    domain: 'brendangregg.com',
+    url: 'brendangregg.com',
     by: 'brendangregg',
     age: '1 hours',
     score: 35,
@@ -77,7 +82,7 @@ final articles = [
   new Article(
     text:
         'Section 230: A Key Legal Shield for Facebook, Google Is about to Change,',
-    domain: 'github.com',
+    url: 'github.com',
     by: 'bluzi',
     age: '8 hours',
     score: 37,
@@ -85,7 +90,7 @@ final articles = [
   ),
   new Article(
     text: 'A Visiting Star jostled our solar System 70,000 Years Ago,',
-    domain: 'gizmodo.com',
+    url: 'gizmodo.com',
     by: 'rbanffy',
     age: '7 hours',
     score: 42,
@@ -93,7 +98,7 @@ final articles = [
   ),
   new Article(
     text: 'Using technical Debt in Your Favor',
-    domain: 'gitconnected.com',
+    url: 'gitconnected.com',
     by: 'treyhuffine',
     age: '7 hours',
     score: 140,
@@ -102,7 +107,7 @@ final articles = [
   new Article(
     text:
         'Circular Shock Acoustic Waves in Ionosphere triggered by Launch of Formosat - 5',
-    domain: 'wiley.com',
+    url: 'wiley.com',
     by: 'zdw',
     age: '3 hours',
     score: 177,
@@ -110,7 +115,7 @@ final articles = [
   ),
   new Article(
     text: 'BMW says electric car mass production not viable until 2020',
-    domain: 'reuters.com',
+    url: 'reuters.com',
     by: 'Mononokay',
     age: '2 hours',
     score: 81,
@@ -118,7 +123,7 @@ final articles = [
   ),
   new Article(
     text: 'BMW says electric car mass production not viable until 2020',
-    domain: 'reuters.com',
+    url: 'reuters.com',
     by: 'Mononokay',
     age: '2 hours',
     score: 81,
@@ -126,7 +131,7 @@ final articles = [
   ),
   new Article(
     text: 'Evolution Is the New Deep Learning',
-    domain: 'sentient.ai',
+    url: 'sentient.ai',
     by: 'jonbaer',
     age: '4 hours',
     score: 200,
@@ -134,7 +139,7 @@ final articles = [
   ),
   new Article(
     text: 'TCP Tracepoints have arrived in Linux',
-    domain: 'brendangregg.com',
+    url: 'brendangregg.com',
     by: 'brendangregg',
     age: '1 hours',
     score: 35,
@@ -143,7 +148,7 @@ final articles = [
   new Article(
     text:
         'Section 230: A Key Legal Shield for Facebook, Google Is about to Change,',
-    domain: 'github.com',
+    url: 'github.com',
     by: 'bluzi',
     age: '8 hours',
     score: 37,
@@ -151,7 +156,7 @@ final articles = [
   ),
   new Article(
     text: 'A Visiting Star jostled our solar System 70,000 Years Ago,',
-    domain: 'gizmodo.com',
+    url: 'gizmodo.com',
     by: 'rbanffy',
     age: '7 hours',
     score: 42,
@@ -159,7 +164,7 @@ final articles = [
   ),
   new Article(
     text: 'Using technical Debt in Your Favor',
-    domain: 'gitconnected.com',
+    url: 'gitconnected.com',
     by: 'treyhuffine',
     age: '7 hours',
     score: 140,
@@ -168,7 +173,7 @@ final articles = [
   new Article(
     text:
         'Circular Shock Acoustic Waves in Ionosphere triggered by Launch of Formosat - 5',
-    domain: 'wiley.com',
+    url: 'wiley.com',
     by: 'zdw',
     age: '3 hours',
     score: 177,
@@ -176,7 +181,7 @@ final articles = [
   ),
   new Article(
     text: 'BMW says electric car mass production not viable until 2020',
-    domain: 'reuters.com',
+    url: 'reuters.com',
     by: 'Mononokay',
     age: '2 hours',
     score: 81,
@@ -184,7 +189,7 @@ final articles = [
   ),
   new Article(
     text: 'BMW says electric car mass production not viable until 2020',
-    domain: 'reuters.com',
+    url: 'reuters.com',
     by: 'Mononokay',
     age: '2 hours',
     score: 81,
@@ -192,7 +197,7 @@ final articles = [
   ),
   new Article(
     text: 'Evolution Is the New Deep Learning',
-    domain: 'sentient.ai',
+    url: 'sentient.ai',
     by: 'jonbaer',
     age: '4 hours',
     score: 200,
@@ -200,7 +205,7 @@ final articles = [
   ),
   new Article(
     text: 'TCP Tracepoints have arrived in Linux',
-    domain: 'brendangregg.com',
+    url: 'brendangregg.com',
     by: 'brendangregg',
     age: '1 hours',
     score: 35,
@@ -209,7 +214,7 @@ final articles = [
   new Article(
     text:
         'Section 230: A Key Legal Shield for Facebook, Google Is about to Change,',
-    domain: 'github.com',
+    url: 'github.com',
     by: 'bluzi',
     age: '8 hours',
     score: 37,
@@ -217,7 +222,7 @@ final articles = [
   ),
   new Article(
     text: 'A Visiting Star jostled our solar System 70,000 Years Ago,',
-    domain: 'gizmodo.com',
+    url: 'gizmodo.com',
     by: 'rbanffy',
     age: '7 hours',
     score: 42,
@@ -225,7 +230,7 @@ final articles = [
   ),
   new Article(
     text: 'Using technical Debt in Your Favor',
-    domain: 'gitconnected.com',
+    url: 'gitconnected.com',
     by: 'treyhuffine',
     age: '7 hours',
     score: 140,
