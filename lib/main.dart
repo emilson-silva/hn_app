@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hnapp/src/article.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 void main() {
   runApp(MyApp());
@@ -33,7 +32,30 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<Article> _articles = articles;
+  List<int> _ids = [
+    9224,
+    8917,
+    8952,
+    8884,
+    8887,
+    8869,
+    8958,
+    8940,
+    8908,
+    9005,
+    8873,
+    9671,
+    9067,
+    9055,
+    8865,
+    8881,
+    8872,
+    8955,
+    10403,
+    8903,
+    8928,
+    9125,
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -65,15 +87,15 @@ class _MyHomePageState extends State<MyHomePage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              Text('${article.commentsCount} comments'),
+              // Text('${article.commentsCount} comments'),
               IconButton(
                 icon: Icon(Icons.launch),
                 color: Colors.green,
                 onPressed: () async {
-                  final fakeUrl = 'http://${article.url}';
+                  /* final fakeUrl = 'http://${article.url}';
                   if (await canLaunch(fakeUrl)) {
                     launch(fakeUrl);
-                  }
+                  }*/
                 },
               ),
             ],

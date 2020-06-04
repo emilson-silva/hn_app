@@ -3,9 +3,10 @@ library serializers;
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/serializer.dart';
 import 'package:built_value/standard_json_plugin.dart';
-import 'package:hnapp/json_parsing.dart';
 
-part 'serializers.g.dart';
+import 'article.dart';
+
+part 'package:hnapp/src/serializers.g.dart';
 
 /// Example of how to use built_value serialization.
 ///

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'json_parsing.dart';
+part of 'article.dart';
 
 // **************************************************************************
 // BuiltValueGenerator
