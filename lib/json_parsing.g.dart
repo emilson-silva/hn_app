@@ -20,43 +20,75 @@ class _$ArticleSerializer implements StructuredSerializer<Article> {
     final result = <Object>[
       'id',
       serializers.serialize(object.id, specifiedType: const FullType(int)),
-      'deleted',
-      serializers.serialize(object.deleted,
-          specifiedType: const FullType(bool)),
       'type',
       serializers.serialize(object.type, specifiedType: const FullType(String)),
       'by',
       serializers.serialize(object.by, specifiedType: const FullType(String)),
       'time',
       serializers.serialize(object.time, specifiedType: const FullType(int)),
-      'text',
-      serializers.serialize(object.text, specifiedType: const FullType(String)),
-      'dead',
-      serializers.serialize(object.dead, specifiedType: const FullType(bool)),
-      'parent',
-      serializers.serialize(object.parent, specifiedType: const FullType(int)),
-      'poll',
-      serializers.serialize(object.poll, specifiedType: const FullType(int)),
       'kids',
       serializers.serialize(object.kids,
           specifiedType:
               const FullType(BuiltList, const [const FullType(int)])),
-      'url',
-      serializers.serialize(object.url, specifiedType: const FullType(String)),
-      'score',
-      serializers.serialize(object.score, specifiedType: const FullType(int)),
-      'title',
-      serializers.serialize(object.title,
-          specifiedType: const FullType(String)),
       'parts',
       serializers.serialize(object.parts,
           specifiedType:
               const FullType(BuiltList, const [const FullType(int)])),
-      'descendants',
-      serializers.serialize(object.descendants,
-          specifiedType: const FullType(int)),
     ];
-
+    if (object.deleted != null) {
+      result
+        ..add('deleted')
+        ..add(serializers.serialize(object.deleted,
+            specifiedType: const FullType(bool)));
+    }
+    if (object.text != null) {
+      result
+        ..add('text')
+        ..add(serializers.serialize(object.text,
+            specifiedType: const FullType(String)));
+    }
+    if (object.dead != null) {
+      result
+        ..add('dead')
+        ..add(serializers.serialize(object.dead,
+            specifiedType: const FullType(bool)));
+    }
+    if (object.parent != null) {
+      result
+        ..add('parent')
+        ..add(serializers.serialize(object.parent,
+            specifiedType: const FullType(int)));
+    }
+    if (object.poll != null) {
+      result
+        ..add('poll')
+        ..add(serializers.serialize(object.poll,
+            specifiedType: const FullType(int)));
+    }
+    if (object.url != null) {
+      result
+        ..add('url')
+        ..add(serializers.serialize(object.url,
+            specifiedType: const FullType(String)));
+    }
+    if (object.score != null) {
+      result
+        ..add('score')
+        ..add(serializers.serialize(object.score,
+            specifiedType: const FullType(int)));
+    }
+    if (object.title != null) {
+      result
+        ..add('title')
+        ..add(serializers.serialize(object.title,
+            specifiedType: const FullType(String)));
+    }
+    if (object.descendants != null) {
+      result
+        ..add('descendants')
+        ..add(serializers.serialize(object.descendants,
+            specifiedType: const FullType(int)));
+    }
     return result;
   }
 
@@ -197,9 +229,6 @@ class _$Article extends Article {
     if (id == null) {
       throw new BuiltValueNullFieldError('Article', 'id');
     }
-    if (deleted == null) {
-      throw new BuiltValueNullFieldError('Article', 'deleted');
-    }
     if (type == null) {
       throw new BuiltValueNullFieldError('Article', 'type');
     }
@@ -209,35 +238,11 @@ class _$Article extends Article {
     if (time == null) {
       throw new BuiltValueNullFieldError('Article', 'time');
     }
-    if (text == null) {
-      throw new BuiltValueNullFieldError('Article', 'text');
-    }
-    if (dead == null) {
-      throw new BuiltValueNullFieldError('Article', 'dead');
-    }
-    if (parent == null) {
-      throw new BuiltValueNullFieldError('Article', 'parent');
-    }
-    if (poll == null) {
-      throw new BuiltValueNullFieldError('Article', 'poll');
-    }
     if (kids == null) {
       throw new BuiltValueNullFieldError('Article', 'kids');
     }
-    if (url == null) {
-      throw new BuiltValueNullFieldError('Article', 'url');
-    }
-    if (score == null) {
-      throw new BuiltValueNullFieldError('Article', 'score');
-    }
-    if (title == null) {
-      throw new BuiltValueNullFieldError('Article', 'title');
-    }
     if (parts == null) {
       throw new BuiltValueNullFieldError('Article', 'parts');
-    }
-    if (descendants == null) {
-      throw new BuiltValueNullFieldError('Article', 'descendants');
     }
   }
 
