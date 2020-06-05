@@ -1,6 +1,10 @@
+import 'dart:convert' as json;
+
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
+
+import 'serializers.dart';
 
 part 'article.g.dart';
 
@@ -52,17 +56,17 @@ abstract class Article implements Built<Article, ArticleBuilder> {
 
 List<int> parseTopStories(String jsonStr) {
   return [];
-/*  final parsed = json.jsonDecode(jsonStr);
+  final parsed = json.jsonDecode(jsonStr);
   final listOfIds = List<int>.from(parsed);
-  return listOfIds;*/
+  return listOfIds;
 }
 
-//Article parseArticle(String jsonStr) {
-//  final parsed = json.jsonDecode(jsonStr);
-//  Article article =
-//      standardSerializers.deserializeWith(Article.serializer, parsed);
-//  return article;
-//}
+Article parseArticle(String jsonStr) {
+  final parsed = json.jsonDecode(jsonStr);
+  Article article =
+      standardSerializers.deserializeWith(Article.serializer, parsed);
+  return article;
+}
 //
 //
 //class Article {

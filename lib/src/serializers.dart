@@ -6,7 +6,7 @@ import 'package:built_value/standard_json_plugin.dart';
 
 import 'article.dart';
 
-part 'package:hnapp/src/serializers.g.dart';
+part 'serializers.g.dart';
 
 /// Example of how to use built_value serialization.
 ///
@@ -19,7 +19,7 @@ part 'package:hnapp/src/serializers.g.dart';
 /// types needed transitively via fields.
 ///
 /// You usually only need to do this once per project.
-@SerializersFor([
+@SerializersFor(const [
   Article,
 ])
 Serializers serializers = _$serializers;
