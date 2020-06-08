@@ -17,6 +17,8 @@ dependencies:
   built_collection: ^4.3.2
   built_value: ^7.1.0
   http: ^0.12.1
+  rxdart: ^0.24.1
+
 
 
 
