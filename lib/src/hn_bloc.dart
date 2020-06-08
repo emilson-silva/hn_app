@@ -1,14 +1,13 @@
+import 'dart:collection';
+
 import 'package:hnapp/src/article.dart';
 import 'package:http/http.dart' as http;
 import 'package:rxdart/rxdart.dart';
 
 class HackerNewsBloc {
-  Stream<List<Article>> get articles => _articlesSubject.stream;
-
-  final _articlesSubject = BehaviorSubject<List<Article>>();
+  final _articlesSubject = BehaviorSubject<UnmodifiableListView<Article>>();
   var _articles = <Article>[];
 
-  HackerNewsBloc() {}
   List<int> _ids = [
     23430282,
     23430332,
@@ -43,11 +42,13 @@ class HackerNewsBloc {
     23418699,
   ];
 
-  Future<List<Article>> _getArticles() async {
-    final futureArticles = _ids.map((id) => _getArticle(id));
-    final articles = await Future.wait(futureArticles);
-    return articles;
+  HackerNewsBloc() {
+    _updateArticles().then((_) {
+      _articlesSubject.add(UnmodifiableListView(_articles));
+    });
   }
+
+  Stream<UnmodifiableListView<Article>> get articles => _articlesSubject.stream;
 
   Future<Article> _getArticle(int id) async {
     final storyUrl = 'https://hacker-news.firebaseio.com/v0/item/$id.json';
@@ -55,5 +56,11 @@ class HackerNewsBloc {
     if (storyRes.statusCode == 200) {
       return parseArticle(storyRes.body);
     }
+  }
+
+  Future<Null> _updateArticles() async {
+    final futureArticles = _ids.map((id) => _getArticle(id));
+    final articles = await Future.wait(futureArticles);
+    _articles = articles;
   }
 }
