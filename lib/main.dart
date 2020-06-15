@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'dart:collection';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hnapp/src/article.dart';
 import 'package:hnapp/src/hn_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -47,11 +49,14 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  int _currentIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        leading: LoadingInfo(widget.bloc.isLoading),
       ),
       body: StreamBuilder<UnmodifiableListView<Article>>(
         stream: widget.bloc.articles,
@@ -61,7 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0,
+        currentIndex: _currentIndex,
         items: [
           BottomNavigationBarItem(
             title: Text('Top Stories'),
@@ -78,6 +83,9 @@ class _MyHomePageState extends State<MyHomePage> {
           } else {
             widget.bloc.storiesType.add(StoriesType.newStories);
           }
+          setState(() {
+            _currentIndex = index;
+          });
         },
       ),
     );
@@ -108,6 +116,43 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class LoadingInfo extends StatefulWidget {
+  LoadingInfo(this._isLoading);
+
+  Stream<bool> _isLoading;
+
+  @override
+  LoadingInfoState createState() => LoadingInfoState();
+}
+
+class LoadingInfoState extends State<LoadingInfo>
+    with TickerProviderStateMixin {
+  AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller =
+        AnimationController(vsync: this, duration: Duration(seconds: 3));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+      stream: widget._isLoading,
+      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+        // if (snapshot.hasData && snapshot.data)
+        _controller.forward().then((value) => _controller.reverse());
+        return FadeTransition(
+          child: Icon(FontAwesomeIcons.hackerNewsSquare),
+          opacity: _controller,
+        );
+        //return Container();
+      },
     );
   }
 }
