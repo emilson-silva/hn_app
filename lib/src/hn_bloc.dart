@@ -1,30 +1,25 @@
+import 'dart:async';
 import 'dart:collection';
 
 import 'package:hnapp/src/article.dart';
 import 'package:http/http.dart' as http;
 import 'package:rxdart/rxdart.dart';
 
+enum StoriesType {
+  topStories,
+  newStories,
+}
+
 class HackerNewsBloc {
   final _articlesSubject = BehaviorSubject<UnmodifiableListView<Article>>();
+
   var _articles = <Article>[];
 
-  List<int> _ids = [
-    23430282,
-    23430332,
-    23428398,
-    23431150,
-    23430671,
-    23425041,
-    23422475,
-    23425508,
-    23426189,
-    23430880,
-    23425524,
-    23429855,
-    23426538,
-    23430142,
-    23414793,
-    23415668,
+  Sink<StoriesType> get storiesType => _storiesTypeController.sink;
+
+  final _storiesTypeController = StreamController<StoriesType>();
+
+  static List<int> _newIds = [
     23429273,
     23430861,
     23426752,
@@ -42,10 +37,41 @@ class HackerNewsBloc {
     23418699,
   ];
 
+  static List<int> _topIds = [
+    23430282,
+    23430332,
+    23428398,
+    23431150,
+    23430671,
+    23425041,
+    23422475,
+    23425508,
+    23426189,
+    23430880,
+    23425524,
+    23429855,
+    23426538,
+    23430142,
+    23414793,
+    23415668,
+  ];
+
   HackerNewsBloc() {
-    _updateArticles().then((_) {
-      _articlesSubject.add(UnmodifiableListView(_articles));
+    _getArticlesAndUpdate(_topIds);
+
+    _storiesTypeController.stream.listen((storiesType) {
+      List<int> ids;
+      if (storiesType == StoriesType.newStories) {
+        _getArticlesAndUpdate(_newIds);
+      } else {
+        _getArticlesAndUpdate(_topIds);
+      }
     });
+  }
+
+  _getArticlesAndUpdate(List<int> ids) {
+    _updateArticles(ids)
+        .then((_) => _articlesSubject.add(UnmodifiableListView(_articles)));
   }
 
   Stream<UnmodifiableListView<Article>> get articles => _articlesSubject.stream;
@@ -58,8 +84,8 @@ class HackerNewsBloc {
     }
   }
 
-  Future<Null> _updateArticles() async {
-    final futureArticles = _ids.map((id) => _getArticle(id));
+  Future<Null> _updateArticles(List<int> articleIds) async {
+    final futureArticles = articleIds.map((id) => _getArticle(id));
     final articles = await Future.wait(futureArticles);
     _articles = articles;
   }
