@@ -21,13 +21,17 @@ class MyApp extends StatelessWidget {
     this.bloc,
   }) : super(key: key);
 
+  static const primaryColor = Color(0xFFFFDE03);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Hacker News',
       theme: ThemeData(
-        primarySwatch: Colors.deepOrange,
+        primaryColor: primaryColor,
+        scaffoldBackgroundColor: primaryColor,
+        //primaryColor: Color(0xFFFFDE03),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: MyHomePage(
@@ -56,7 +60,8 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
-        leading: LoadingInfo(widget.bloc.isLoading),
+        //leading: LoadingInfo(widget.bloc.isLoading),
+        elevation: 0.0,
       ),
       body: StreamBuilder<UnmodifiableListView<Article>>(
         stream: widget.bloc.articles,
@@ -94,7 +99,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _buildItem(Article article) {
     return Padding(
       key: Key(article.title),
-      padding: EdgeInsets.all(16.0),
+      padding: EdgeInsets.all(4.0),
       child: ExpansionTile(
         title:
             Text(article.title ?? '[null]', style: TextStyle(fontSize: 24.0)),
