@@ -144,24 +144,22 @@ class LoadingInfoState extends State<LoadingInfo>
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: widget._isLoading,
-      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        // if (snapshot.hasData && snapshot.data) {
-        _controller.forward().then(
-              (e) => _controller.reverse(),
-            );
-
-        return FadeTransition(
-          child: Icon(FontAwesomeIcons.hackerNewsSquare),
-          opacity: Tween(begin: .5, end: 1.0).animate(
-            CurvedAnimation(
-              curve: Curves.easeIn,
-              parent: _controller,
+      builder: (BuildContext context, AsyncSnapshot<bool> loading) {
+        if (loading.hasData && loading.data) {
+          _controller.forward().then((e) {
+            _controller.reverse();
+          });
+          return FadeTransition(
+            child: Icon(FontAwesomeIcons.hackerNewsSquare),
+            opacity: Tween(begin: .5, end: 1.0).animate(
+              CurvedAnimation(
+                curve: Curves.easeIn,
+                parent: _controller,
+              ),
             ),
-          ),
-        );
-        //}
-        //_controller.reverse();
-        // return Container();
+          );
+        }
+        return Container();
       },
     );
   }
