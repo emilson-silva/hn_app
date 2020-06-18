@@ -55,7 +55,7 @@ class HackerNewsBloc {
 
   HackerNewsBloc() {
     _cacheArticles = HashMap<int, Article>();
-    _initializeArticle();
+    _initializeArticles();
 
     _storiesTypeController.stream.listen((storiesType) async {
       _getArticlesAndUpdate(await _getIds(storiesType));
@@ -66,7 +66,7 @@ class HackerNewsBloc {
 
   Sink<StoriesType> get storiesType => _storiesTypeController.sink;
 
-  Future<void> _initializeArticle() async {
+  Future<void> _initializeArticles() async {
     _getArticlesAndUpdate(await _getIds(StoriesType.topStories));
   }
 
@@ -89,12 +89,16 @@ class HackerNewsBloc {
   static const _baseUrl = 'https://hacker-news.firebaseio.com/v0/';
 
   Future<Article> _getArticle(int id) async {
-    final storyUrl = '${_baseUrl}item/$id.json';
-    final storyRes = await http.get(storyUrl);
-    if (storyRes.statusCode == 200) {
-      return parseArticle(storyRes.body);
+    if (!_cacheArticles.containsKey(id)) {
+      final storyUrl = '${_baseUrl}item/$id.json';
+      final storyRes = await http.get(storyUrl);
+      if (storyRes.statusCode == 200) {
+        _cacheArticles[id] = parseArticle(storyRes.body);
+      } else {
+        throw HackerNewsApiError("Article $id couldn't be fetched");
+      }
     }
-    throw HackerNewsApiError("Article $id couldn't be fetched");
+    return _cacheArticles[id];
   }
 
   _getArticlesAndUpdate(List<int> ids) async {
