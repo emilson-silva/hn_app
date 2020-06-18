@@ -54,6 +54,7 @@ class HackerNewsBloc {
   final _storiesTypeController = StreamController<StoriesType>();
 
   HackerNewsBloc() {
+    _cacheArticles = HashMap<int, Article>();
     _initializeArticle();
 
     _storiesTypeController.stream.listen((storiesType) async {
@@ -61,13 +62,13 @@ class HackerNewsBloc {
     });
   }
 
-  Future<void> _initializeArticle() async {
-    _getArticlesAndUpdate(await _getIds(StoriesType.topStories));
-  }
-
   Stream<UnmodifiableListView<Article>> get articles => _articlesSubject.stream;
 
   Sink<StoriesType> get storiesType => _storiesTypeController.sink;
+
+  Future<void> _initializeArticle() async {
+    _getArticlesAndUpdate(await _getIds(StoriesType.topStories));
+  }
 
   void close() {
     _storiesTypeController.close();
@@ -82,6 +83,8 @@ class HackerNewsBloc {
     }
     return parseTopStories(response.body).take(10).toList();
   }
+
+  HashMap<int, Article> _cacheArticles;
 
   static const _baseUrl = 'https://hacker-news.firebaseio.com/v0/';
 
@@ -115,7 +118,7 @@ enum StoriesType {
 }
 
 class HackerNewsApiError extends Error {
-  HackerNewsApiError(this.message);
-
   final String message;
+
+  HackerNewsApiError(this.message);
 }
