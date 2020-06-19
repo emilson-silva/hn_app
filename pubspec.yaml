@@ -46,4 +46,8 @@ flutter:
     - family: PressStart
       fonts:
         - asset: fonts/PressStart2P-Regular.ttf
+        - asset: fonts/EBGaramond-Italic-VariableFont_wght.ttf
+        - asset: fonts/EBGaramond-VariableFont_wght.ttf
+        - asset: fonts/Garamond Regular.ttf
+        - asset: fonts/Garamond.ttf
 

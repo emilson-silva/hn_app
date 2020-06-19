@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
         canvasColor: Colors.black,
         textTheme: Theme.of(context).textTheme.copyWith(
               caption: TextStyle(color: Colors.white54),
-              subtitle1: TextStyle(fontFamily: 'PressStart', fontSize: 10.0),
+              subtitle1: TextStyle(fontFamily: 'Garamond', fontSize: 10.0),
             ),
       ),
       home: MyHomePage(
@@ -63,8 +63,14 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
-        //leading: LoadingInfo(widget.bloc.isLoading),
+        leading: LoadingInfo(widget.bloc.isLoading),
         elevation: 0.0,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {},
+          ),
+        ],
       ),
       body: StreamBuilder<UnmodifiableListView<Article>>(
         stream: widget.bloc.articles,
