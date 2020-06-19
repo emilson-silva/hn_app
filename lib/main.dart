@@ -67,9 +67,13 @@ class _MyHomePageState extends State<MyHomePage> {
         elevation: 0.0,
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {},
-          ),
+              icon: Icon(Icons.search),
+              onPressed: () {
+                showSearch(
+                  context: context,
+                  delegate: ArticleSearch(widget.bloc.articles),
+                );
+              }),
         ],
       ),
       body: StreamBuilder<UnmodifiableListView<Article>>(
@@ -178,6 +182,103 @@ class LoadingInfoState extends State<LoadingInfo>
           );
         }
         return Container();
+      },
+    );
+  }
+}
+
+class ArticleSearch extends SearchDelegate<Article> {
+  ArticleSearch(this.articles);
+
+  final Stream<UnmodifiableListView<Article>> articles;
+
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: Icon(Icons.clear),
+        onPressed: () {
+          query = '';
+        },
+      )
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.arrow_back),
+      onPressed: () {
+        close(context, null);
+      },
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    return StreamBuilder<UnmodifiableListView<Article>>(
+      stream: articles,
+      builder:
+          (context, AsyncSnapshot<UnmodifiableListView<Article>> snapshot) {
+        if (!snapshot.hasData) {
+          return Center(
+            child: Text('No data!'),
+          );
+        }
+
+        final results = snapshot.data.where(
+          (a) => a.title.toLowerCase().contains(query),
+        );
+
+        return ListView(
+          children: results
+              .map<ListTile>((a) => ListTile(
+                    title: Text(a.title,
+                        style: Theme.of(context)
+                            .textTheme
+                            .subtitle1
+                            .copyWith(fontSize: 16.0)),
+                    leading: Icon(Icons.book),
+                    onTap: () {
+                      close(context, a);
+                    },
+                  ))
+              .toList(),
+        );
+      },
+    );
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    return StreamBuilder<UnmodifiableListView<Article>>(
+      stream: articles,
+      builder:
+          (context, AsyncSnapshot<UnmodifiableListView<Article>> snapshot) {
+        if (!snapshot.hasData) {
+          return Center(
+            child: Text('No data!'),
+          );
+        }
+
+        final results = snapshot.data.where(
+          (a) => a.title.toLowerCase().contains(query),
+        );
+
+        return ListView(
+          children: results
+              .map<ListTile>((a) => ListTile(
+                    title: Text(a.title,
+                        style: Theme.of(context)
+                            .textTheme
+                            .subtitle1
+                            .copyWith(fontSize: 16.0, color: Colors.blue)),
+                    onTap: () {
+                      close(context, a);
+                    },
+                  ))
+              .toList(),
+        );
       },
     );
   }
