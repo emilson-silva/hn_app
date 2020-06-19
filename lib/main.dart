@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
     this.bloc,
   }) : super(key: key);
 
-  static const primaryColor = Color(0xFFFFDE03);
+  static const primaryColor = Colors.white;
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +31,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: primaryColor,
         scaffoldBackgroundColor: primaryColor,
-        //primaryColor: Color(0xFFFFDE03),
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+        canvasColor: Colors.black,
+        textTheme: Theme.of(context).textTheme.copyWith(
+              caption: TextStyle(color: Colors.white54),
+              subtitle1: TextStyle(fontFamily: 'PressStart', fontSize: 10.0),
+            ),
       ),
       home: MyHomePage(
         title: 'Flutter Hacker News',
@@ -99,25 +102,29 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _buildItem(Article article) {
     return Padding(
       key: Key(article.title),
-      padding: EdgeInsets.all(4.0),
+      padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 12.0),
       child: ExpansionTile(
         title:
             Text(article.title ?? '[null]', style: TextStyle(fontSize: 24.0)),
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              Text('${article.descendants} comments'),
-              IconButton(
-                icon: Icon(Icons.launch),
-                color: Colors.green,
-                onPressed: () async {
-                  if (await canLaunch(article.url)) {
-                    launch(article.url);
-                  }
-                },
-              ),
-            ],
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Text('${article.descendants} comments'),
+                SizedBox(width: 16.0),
+                IconButton(
+                  icon: Icon(Icons.launch),
+                  color: Colors.green,
+                  onPressed: () async {
+                    if (await canLaunch(article.url)) {
+                      launch(article.url);
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
         ],
       ),
