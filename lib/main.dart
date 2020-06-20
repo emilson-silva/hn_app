@@ -66,14 +66,23 @@ class _MyHomePageState extends State<MyHomePage> {
         leading: LoadingInfo(widget.bloc.isLoading),
         elevation: 0.0,
         actions: <Widget>[
-          IconButton(
+          Builder(
+            builder: (context) => IconButton(
               icon: Icon(Icons.search),
-              onPressed: () {
-                showSearch(
+              onPressed: () async {
+                final Article result = await showSearch(
                   context: context,
                   delegate: ArticleSearch(widget.bloc.articles),
                 );
-              }),
+//                Scaffold.of(context).showSnackBar(
+//                  SnackBar(content: Text(result.title)),
+//                );
+                if (await canLaunch(result.url)) {
+                  launch(result.url);
+                }
+              },
+            ),
+          ),
         ],
       ),
       body: StreamBuilder<UnmodifiableListView<Article>>(
