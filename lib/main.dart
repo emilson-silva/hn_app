@@ -75,7 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   delegate: ArticleSearch(widget.bloc.articles),
                 );
 //                Scaffold.of(context).showSnackBar(
-//                  SnackBar(content: Text(result.title)),
+//                  SnackBar(content: Text(result.title))
 //                );
                 if (await canLaunch(result.url)) {
                   launch(result.url);
@@ -248,7 +248,10 @@ class ArticleSearch extends SearchDelegate<Article> {
                             .subtitle1
                             .copyWith(fontSize: 16.0)),
                     leading: Icon(Icons.book),
-                    onTap: () {
+                    onTap: () async {
+                      if(await canLaunch(a.url)){
+                        await launch(a.url);
+                      }
                       close(context, a);
                     },
                   ))
