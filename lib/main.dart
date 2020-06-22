@@ -137,27 +137,35 @@ class _MyHomePageState extends State<MyHomePage> {
         children: [
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+            child: Column(
               children: <Widget>[
-                Text('${article.descendants} comments'),
-                SizedBox(width: 16.0),
-                IconButton(
-                  icon: Icon(Icons.launch),
-                  color: Colors.green,
-                  onPressed: () async {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => HackerNewsWebPage(article.url),
-                      ),
-                    );
-
-                    /* if (await canLaunch(article.url)) {
-                      launch(article.url);
-                    }*/
-                  },
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Text('${article.descendants} comments'),
+                    SizedBox(width: 16.0),
+                    IconButton(
+                      icon: Icon(Icons.launch),
+                      color: Colors.green,
+                      onPressed: () async {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                HackerNewsWebPage(article.url),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ),
+                Container(
+                  height: 200.0,
+                  child: WebView(
+                    initialUrl: article.url,
+                    javascriptMode: JavascriptMode.unrestricted,
+                  ),
+                )
               ],
             ),
           ),
@@ -325,6 +333,11 @@ class HackerNewsWebPage extends StatelessWidget {
       ),
       body: WebView(
         initialUrl: url,
+        javascriptMode: JavascriptMode.unrestricted,
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.favorite),
+        onPressed: () {},
       ),
     );
   }
