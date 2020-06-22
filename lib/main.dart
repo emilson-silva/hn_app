@@ -7,6 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hnapp/src/article.dart';
 import 'package:hnapp/src/hn_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 void main() {
   final hnBloc = HackerNewsBloc();
@@ -74,12 +75,20 @@ class _MyHomePageState extends State<MyHomePage> {
                   context: context,
                   delegate: ArticleSearch(widget.bloc.articles),
                 );
-//                Scaffold.of(context).showSnackBar(
-//                  SnackBar(content: Text(result.title))
-//                );
-                if (await canLaunch(result.url)) {
-                  launch(result.url);
+                if (result != null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HackerNewsWebPage(result.url),
+                    ),
+                  );
                 }
+//                if (await canLaunch(result.url)) {
+//                  launch(
+//                    result.url,
+//                    forceWebView: true,
+//                  );
+//                }
               },
             ),
           ),
@@ -137,9 +146,16 @@ class _MyHomePageState extends State<MyHomePage> {
                   icon: Icon(Icons.launch),
                   color: Colors.green,
                   onPressed: () async {
-                    if (await canLaunch(article.url)) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => HackerNewsWebPage(article.url),
+                      ),
+                    );
+
+                    /* if (await canLaunch(article.url)) {
                       launch(article.url);
-                    }
+                    }*/
                   },
                 ),
               ],
@@ -249,7 +265,7 @@ class ArticleSearch extends SearchDelegate<Article> {
                             .copyWith(fontSize: 16.0)),
                     leading: Icon(Icons.book),
                     onTap: () async {
-                      if(await canLaunch(a.url)){
+                      if (await canLaunch(a.url)) {
                         await launch(a.url);
                       }
                       close(context, a);
@@ -292,6 +308,24 @@ class ArticleSearch extends SearchDelegate<Article> {
               .toList(),
         );
       },
+    );
+  }
+}
+
+class HackerNewsWebPage extends StatelessWidget {
+  HackerNewsWebPage(this.url);
+
+  final String url;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Web Page'),
+      ),
+      body: WebView(
+        initialUrl: url,
+      ),
     );
   }
 }
