@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hnapp/src/article.dart';
@@ -71,18 +73,18 @@ class _MyHomePageState extends State<MyHomePage> {
             builder: (context) => IconButton(
               icon: Icon(Icons.search),
               onPressed: () async {
-                final Article result = await showSearch(
+                /*final Article result = await showSearch(
                   context: context,
                   delegate: ArticleSearch(widget.bloc.articles),
-                );
-                if (result != null) {
+                );*/
+                /*if (result != null) {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => HackerNewsWebPage(result.url),
                     ),
                   );
-                }
+                }*/
 //                if (await canLaunch(result.url)) {
 //                  launch(
 //                    result.url,
@@ -94,13 +96,23 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
-      body: StreamBuilder<UnmodifiableListView<Article>>(
-        stream: widget.bloc.articles,
-        initialData: UnmodifiableListView<Article>([]),
-        builder: (context, snapshot) => ListView(
-          children: snapshot.data.map(_buildItem).toList(),
-        ),
-      ),
+      body: _currentIndex == 0
+          ? StreamBuilder<UnmodifiableListView<Article>>(
+              stream: widget.bloc.topArticles,
+              initialData: UnmodifiableListView<Article>([]),
+              builder: (context, snapshot) => ListView(
+                key: PageStorageKey(0),
+                children: snapshot.data.map(_buildItem).toList(),
+              ),
+            )
+          : StreamBuilder<UnmodifiableListView<Article>>(
+              stream: widget.bloc.newArticles,
+              initialData: UnmodifiableListView<Article>([]),
+              builder: (context, snapshot) => ListView(
+                key: PageStorageKey(1),
+                children: snapshot.data.map(_buildItem).toList(),
+              ),
+            ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         items: [
@@ -129,7 +141,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget _buildItem(Article article) {
     return Padding(
-      key: Key(article.title),
+      key: PageStorageKey(article.title),
       padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 12.0),
       child: ExpansionTile(
         title:
@@ -164,6 +176,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: WebView(
                     initialUrl: article.url,
                     javascriptMode: JavascriptMode.unrestricted,
+                    gestureRecognizers: Set()
+                      ..add(Factory<VerticalDragGestureRecognizer>(
+                          () => VerticalDragGestureRecognizer())),
                   ),
                 )
               ],
