@@ -73,24 +73,20 @@ class _MyHomePageState extends State<MyHomePage> {
             builder: (context) => IconButton(
               icon: Icon(Icons.search),
               onPressed: () async {
-                /*final Article result = await showSearch(
+                final Article result = await showSearch(
                   context: context,
-                  delegate: ArticleSearch(widget.bloc.articles),
-                );*/
-                /*if (result != null) {
+                  delegate: ArticleSearch(_currentIndex == 0
+                      ? widget.bloc.topArticles
+                      : widget.bloc.newArticles),
+                );
+                if (result != null) {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => HackerNewsWebPage(result.url),
                     ),
                   );
-                }*/
-//                if (await canLaunch(result.url)) {
-//                  launch(
-//                    result.url,
-//                    forceWebView: true,
-//                  );
-//                }
+                }
               },
             ),
           ),
