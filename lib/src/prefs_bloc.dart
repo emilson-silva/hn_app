@@ -5,7 +5,7 @@ import 'package:hnapp/src/article.dart';
 import 'package:http/http.dart' as http;
 import 'package:rxdart/rxdart.dart';
 
-class HackerNewsBloc {
+class PrefsBloc {
   Stream<bool> get isLoading => _isLoadingSubject.stream;
 
   final _isLoadingSubject = BehaviorSubject<bool>();
@@ -18,7 +18,7 @@ class HackerNewsBloc {
 
   final _storiesTypeController = StreamController<StoriesType>();
 
-  HackerNewsBloc() {
+  PrefsBloc() {
     _cacheArticles = HashMap<int, Article>();
     _initializeArticles();
 
@@ -54,7 +54,7 @@ class HackerNewsBloc {
     final url = '$_baseUrl${partUrl}stories.json';
     final response = await http.get(url);
     if (response.statusCode != 200) {
-      throw HackerNewsApiError("Stories $type couldn't be fetched.");
+      throw PrefsBlocError("Stories $type couldn't be fetched.");
     }
     return parseTopStories(response.body).take(10).toList();
   }
@@ -70,7 +70,7 @@ class HackerNewsBloc {
       if (storyRes.statusCode == 200) {
         _cacheArticles[id] = parseArticle(storyRes.body);
       } else {
-        throw HackerNewsApiError("Article $id couldn't be fetched");
+        throw PrefsBlocError("Article $id couldn't be fetched");
       }
     }
     return _cacheArticles[id];
@@ -97,10 +97,10 @@ enum StoriesType {
   newStories,
 }
 
-class HackerNewsApiError extends Error {
+class PrefsBlocError extends Error {
   final String message;
 
-  HackerNewsApiError(this.message);
+  PrefsBlocError(this.message);
 }
 
 //static List<int> _newIds = [
