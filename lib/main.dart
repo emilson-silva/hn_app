@@ -132,12 +132,19 @@ class _MyHomePageState extends State<MyHomePage> {
             title: Text('New Stories'),
             icon: Icon(Icons.new_releases),
           ),
+          BottomNavigationBarItem(
+            title: Text('Preferences'),
+            icon: Icon(Icons.settings),
+          ),
         ],
         onTap: (index) {
           if (index == 0) {
             widget.hackerNewsBloc.storiesType.add(StoriesType.topStories);
-          } else {
+          }
+          if (index == 1) {
             widget.hackerNewsBloc.storiesType.add(StoriesType.newStories);
+          } else {
+            _showPrefsSheet(context, widget.prefsBloc);
           }
           setState(() {
             _currentIndex = index;
@@ -145,6 +152,27 @@ class _MyHomePageState extends State<MyHomePage> {
         },
       ),
     );
+  }
+
+  void _showPrefsSheet(BuildContext context, PrefsBloc bloc) async {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Scaffold(
+            body: Center(
+              child: StreamBuilder<PrefsState>(
+                  stream: bloc.currentPrefs,
+                  builder: (context, AsyncSnapshot<PrefsState> snapshot) {
+                    return snapshot.hasData
+                        ? Switch(
+                            value: snapshot.data.showWebView,
+                            onChanged: (b) => bloc.showWebViewPref.add(b),
+                          )
+                        : Text('Nothing');
+                  }),
+            ),
+          );
+        });
   }
 
   Widget _buildItem(Article article) {
