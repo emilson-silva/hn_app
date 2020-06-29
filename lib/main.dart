@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:collection';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +19,6 @@ void main() {
     hackerNewsBloc: hnBloc,
     prefsBloc: prefsBloc,
   ));
-  //TODO
 }
 
 class MyApp extends StatelessWidget {
@@ -50,7 +48,6 @@ class MyApp extends StatelessWidget {
             ),
       ),
       home: MyHomePage(
-        title: 'Flutter Hacker News',
         hackerNewsBloc: hackerNewsBloc,
         prefsBloc: prefsBloc,
       ),
@@ -61,10 +58,12 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   final HackerNewsBloc hackerNewsBloc;
   final PrefsBloc prefsBloc;
-  final String title;
 
-  MyHomePage({Key key, this.title, this.hackerNewsBloc, this.prefsBloc})
-      : super(key: key);
+  MyHomePage({
+    Key key,
+    this.hackerNewsBloc,
+    this.prefsBloc,
+  }) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -77,50 +76,46 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text('Flutter Hacker News'),
         leading: LoadingInfo(widget.hackerNewsBloc.isLoading),
         elevation: 0.0,
         actions: <Widget>[
-          Builder(
-            builder: (context) => IconButton(
-              icon: Icon(Icons.search),
-              onPressed: () async {
-                final Article result = await showSearch(
-                  context: context,
-                  delegate: ArticleSearch(_currentIndex == 0
-                      ? widget.hackerNewsBloc.topArticles
-                      : widget.hackerNewsBloc.newArticles),
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () async {
+              final Article result = await showSearch(
+                context: context,
+                delegate: ArticleSearch(_currentIndex == 0
+                    ? widget.hackerNewsBloc.topArticles
+                    : widget.hackerNewsBloc.newArticles),
+              );
+              if (result != null) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HackerNewsWebPage(result.url),
+                  ),
                 );
-                if (result != null) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => HackerNewsWebPage(result.url),
-                    ),
-                  );
-                }
-              },
-            ),
+              }
+            },
           ),
         ],
       ),
-      body: _currentIndex == 0
-          ? StreamBuilder<UnmodifiableListView<Article>>(
-              stream: widget.hackerNewsBloc.topArticles,
-              initialData: UnmodifiableListView<Article>([]),
-              builder: (context, snapshot) => ListView(
-                key: PageStorageKey(0),
-                children: snapshot.data.map(_buildItem).toList(),
-              ),
-            )
-          : StreamBuilder<UnmodifiableListView<Article>>(
-              stream: widget.hackerNewsBloc.newArticles,
-              initialData: UnmodifiableListView<Article>([]),
-              builder: (context, snapshot) => ListView(
-                key: PageStorageKey(1),
-                children: snapshot.data.map(_buildItem).toList(),
-              ),
-            ),
+      body: StreamBuilder<UnmodifiableListView<Article>>(
+        stream: _currentIndex == 0
+            ? widget.hackerNewsBloc.topArticles
+            : widget.hackerNewsBloc.newArticles,
+        initialData: UnmodifiableListView<Article>([]),
+        builder: (context, snapshot) => ListView(
+          key: PageStorageKey(_currentIndex),
+          children: snapshot.data
+              .map((a) => _Item(
+                    article: a,
+                    prefsBloc: widget.prefsBloc,
+                  ))
+              .toList(),
+        ),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         items: [
@@ -174,8 +169,21 @@ class _MyHomePageState extends State<MyHomePage> {
           );
         });
   }
+}
 
-  Widget _buildItem(Article article) {
+class _Item extends StatelessWidget {
+  final Article article;
+  final PrefsBloc prefsBloc;
+
+  const _Item({
+    Key key,
+    @required this.article,
+    @required this.prefsBloc,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    assert(article.title != null);
     return Padding(
       key: PageStorageKey(article.title),
       padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 12.0),
@@ -195,20 +203,17 @@ class _MyHomePageState extends State<MyHomePage> {
                     IconButton(
                       icon: Icon(Icons.launch),
                       color: Colors.green,
-                      onPressed: () async {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                HackerNewsWebPage(article.url),
-                          ),
-                        );
-                      },
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => HackerNewsWebPage(article.url),
+                        ),
+                      ),
                     ),
                   ],
                 ),
                 StreamBuilder<PrefsState>(
-                  stream: widget.prefsBloc.currentPrefs,
+                  stream: prefsBloc.currentPrefs,
                   builder: (context, snapshot) {
                     if (snapshot.data?.showWebView == true) {
                       return Container(
@@ -319,9 +324,8 @@ class ArticleSearch extends SearchDelegate<Article> {
           );
         }
 
-        final results = snapshot.data.where(
-          (a) => a.title.toLowerCase().contains(query),
-        );
+        var results = snapshot.data
+            .where((a) => a.title.toLowerCase().contains(query.toLowerCase()));
 
         return ListView(
           children: results

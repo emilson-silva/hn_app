@@ -87,8 +87,10 @@ class HackerNewsBloc {
 
   Future<Null> _updateArticles(List<int> articleIds) async {
     final futureArticles = articleIds.map((id) => _getArticle(id));
-    final articles = await Future.wait(futureArticles);
-    _articles = articles;
+    final all = await Future.wait(futureArticles);
+    final filtered = all.where((a) => a.title != null).toList();
+
+    _articles = filtered;
   }
 }
 
