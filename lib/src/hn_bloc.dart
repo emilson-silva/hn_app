@@ -47,6 +47,8 @@ class HackerNewsBloc {
 
   void close() {
     _storiesTypeController.close();
+    _topArticlesSubject.close();
+    _newArticlesSubject.close();
   }
 
   Future<List<int>> _getIds(StoriesType type) async {

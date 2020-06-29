@@ -266,7 +266,7 @@ class LoadingInfoState extends State<LoadingInfo>
       stream: widget._isLoading,
       builder: (BuildContext context, AsyncSnapshot<bool> loading) {
         if (loading.hasData && loading.data) {
-          _controller.forward().then((e) {
+          _controller.forward().then((_) {
             _controller.reverse();
           });
           return FadeTransition(
