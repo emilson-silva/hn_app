@@ -8,7 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hnapp/src/article.dart';
 import 'package:hnapp/src/hn_bloc.dart';
 import 'package:hnapp/src/prefs_bloc.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:hnapp/src/widgets/search.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 void main() {
@@ -280,105 +280,6 @@ class LoadingInfoState extends State<LoadingInfo>
           );
         }
         return Container();
-      },
-    );
-  }
-}
-
-class ArticleSearch extends SearchDelegate<Article> {
-  ArticleSearch(this.articles);
-
-  final Stream<UnmodifiableListView<Article>> articles;
-
-  @override
-  List<Widget> buildActions(BuildContext context) {
-    return [
-      IconButton(
-        icon: Icon(Icons.clear),
-        onPressed: () {
-          query = '';
-        },
-      )
-    ];
-  }
-
-  @override
-  Widget buildLeading(BuildContext context) {
-    return IconButton(
-      icon: Icon(Icons.arrow_back),
-      onPressed: () {
-        close(context, null);
-      },
-    );
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    return StreamBuilder<UnmodifiableListView<Article>>(
-      stream: articles,
-      builder:
-          (context, AsyncSnapshot<UnmodifiableListView<Article>> snapshot) {
-        if (!snapshot.hasData) {
-          return Center(
-            child: Text('No data!'),
-          );
-        }
-
-        var results = snapshot.data
-            .where((a) => a.title.toLowerCase().contains(query.toLowerCase()));
-
-        return ListView(
-          children: results
-              .map<ListTile>((a) => ListTile(
-                    title: Text(a.title,
-                        style: Theme.of(context)
-                            .textTheme
-                            .subtitle1
-                            .copyWith(fontSize: 16.0)),
-                    leading: Icon(Icons.book),
-                    onTap: () async {
-                      if (await canLaunch(a.url)) {
-                        await launch(a.url);
-                      }
-                      close(context, a);
-                    },
-                  ))
-              .toList(),
-        );
-      },
-    );
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    return StreamBuilder<UnmodifiableListView<Article>>(
-      stream: articles,
-      builder:
-          (context, AsyncSnapshot<UnmodifiableListView<Article>> snapshot) {
-        if (!snapshot.hasData) {
-          return Center(
-            child: Text('No data!'),
-          );
-        }
-
-        final results = snapshot.data.where(
-          (a) => a.title.toLowerCase().contains(query),
-        );
-
-        return ListView(
-          children: results
-              .map<ListTile>((a) => ListTile(
-                    title: Text(a.title,
-                        style: Theme.of(context)
-                            .textTheme
-                            .subtitle1
-                            .copyWith(fontSize: 16.0, color: Colors.blue)),
-                    onTap: () {
-                      close(context, a);
-                    },
-                  ))
-              .toList(),
-        );
       },
     );
   }
