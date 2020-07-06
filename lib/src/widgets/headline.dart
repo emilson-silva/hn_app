@@ -14,15 +14,14 @@ class Headline extends ImplicitlyAnimatedWidget {
 }
 
 class HeadlineState extends AnimatedWidgetBaseState<Headline> {
-  ColorTween _colorTween = ColorTween(
-    begin: Colors.black,
-    end: Colors.blue,
-  );
+  _GhostFadeTween _colorTween;
+
+  _SwitchStringTween _switchStringTween;
 
   @override
   Widget build(BuildContext context) {
     return Text(
-      '${widget.text} (${widget.index})',
+      '${_switchStringTween.evaluate(animation)})',
       style: TextStyle(color: _colorTween.evaluate(animation)),
     );
   }
@@ -34,7 +33,38 @@ class HeadlineState extends AnimatedWidgetBaseState<Headline> {
     _colorTween = visitor(
       _colorTween,
       widget.targetColor,
-      (color) => ColorTween(begin: color),
+      (color) => _GhostFadeTween(begin: color),
     );
+    _switchStringTween = visitor(
+      _switchStringTween,
+      widget.text,
+      (value) => _SwitchStringTween(begin: value),
+    );
+  }
+}
+
+class _GhostFadeTween extends Tween<Color> {
+  Color begin;
+  Color end;
+  final Color middle = Colors.white;
+
+  _GhostFadeTween({this.begin, this.end}) : super(begin: begin, end: end);
+
+  Color lerp(double t) {
+    if (t < 0.5) {
+      return Color.lerp(begin, middle, t * 2);
+    } else {
+      return Color.lerp(middle, end, (t - 0.5) * 2);
+    }
+  }
+}
+
+class _SwitchStringTween extends Tween<String> {
+  _SwitchStringTween({String begin, String end})
+      : super(begin: begin, end: end);
+
+  String lerp(double t) {
+    if (t < 0.5) return begin;
+    return end;
   }
 }
