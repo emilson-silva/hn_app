@@ -9,28 +9,28 @@ import 'package:hnapp/src/hn_bloc.dart';
 import 'package:hnapp/src/prefs_bloc.dart';
 import 'package:hnapp/src/widgets/headline.dart';
 import 'package:hnapp/src/widgets/search.dart';
+import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 void main() {
-  final hnBloc = HackerNewsBloc();
-  final prefsBloc = PrefsBloc();
-
-  runApp(MyApp(
-    hackerNewsBloc: hnBloc,
-    prefsBloc: prefsBloc,
+  runApp(MultiProvider(
+    providers: [
+      Provider(
+        create: (BuildContext context) {
+          HackerNewsBloc();
+        },
+      ),
+      Provider(
+        create: (BuildContext context) {
+          PrefsBloc();
+        },
+      ),
+    ],
+    child: MyApp(),
   ));
 }
 
 class MyApp extends StatelessWidget {
-  final HackerNewsBloc hackerNewsBloc;
-  final PrefsBloc prefsBloc;
-
-  MyApp({
-    Key key,
-    this.hackerNewsBloc,
-    this.prefsBloc,
-  }) : super(key: key);
-
   static const primaryColor = Colors.white;
 
   @override
@@ -47,24 +47,12 @@ class MyApp extends StatelessWidget {
               subtitle1: TextStyle(fontFamily: 'Garamond', fontSize: 10.0),
             ),
       ),
-      home: MyHomePage(
-        hackerNewsBloc: hackerNewsBloc,
-        prefsBloc: prefsBloc,
-      ),
+      home: MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  final HackerNewsBloc hackerNewsBloc;
-  final PrefsBloc prefsBloc;
-
-  MyHomePage({
-    Key key,
-    this.hackerNewsBloc,
-    this.prefsBloc,
-  }) : super(key: key);
-
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -82,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
               : 'Flutter HackerNews: New',
           index: _currentIndex,
         ),
-        leading: LoadingInfo(widget.hackerNewsBloc.isLoading),
+        leading: LoadingInfo(),
         elevation: 0.0,
         actions: <Widget>[
           IconButton(
@@ -91,8 +79,8 @@ class _MyHomePageState extends State<MyHomePage> {
               final Article result = await showSearch(
                 context: context,
                 delegate: ArticleSearch(_currentIndex == 0
-                    ? widget.hackerNewsBloc.topArticles
-                    : widget.hackerNewsBloc.newArticles),
+                    ? Provider.of<HackerNewsBloc>(context).topArticles
+                    : Provider.of<HackerNewsBloc>(context).newArticles),
               );
               if (result != null) {
                 Navigator.push(
@@ -108,15 +96,15 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: StreamBuilder<UnmodifiableListView<Article>>(
         stream: _currentIndex == 0
-            ? widget.hackerNewsBloc.topArticles
-            : widget.hackerNewsBloc.newArticles,
+            ? Provider.of<HackerNewsBloc>(context).topArticles
+            : Provider.of<HackerNewsBloc>(context).newArticles,
         initialData: UnmodifiableListView<Article>([]),
         builder: (context, snapshot) => ListView(
           key: PageStorageKey(_currentIndex),
           children: snapshot.data
               .map((a) => _Item(
                     article: a,
-                    prefsBloc: widget.prefsBloc,
+                    prefsBloc: Provider.of<PrefsBloc>(context),
                   ))
               .toList(),
         ),
@@ -139,13 +127,17 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
         onTap: (index) {
           if (index == 0) {
-            widget.hackerNewsBloc.storiesType.add(StoriesType.topStories);
+            Provider.of<HackerNewsBloc>(context)
+                .storiesType
+                .add(StoriesType.topStories);
           }
-          if (index == 1) {
-            widget.hackerNewsBloc.storiesType.add(StoriesType.newStories);
+          /*    if (index == 1) {
+            Provider.of<HackerNewsBloc>(context)
+                .storiesType
+                .add(StoriesType.newStories);
           } else {
-            _showPrefsSheet(context, widget.prefsBloc);
-          }
+            _showPrefsSheet(context, Provider.of<PrefsBloc>(context));
+          }*/
           setState(() {
             _currentIndex = index;
           });
